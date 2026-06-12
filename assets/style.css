@@ -1,24 +1,31 @@
 /* ============================================================
-   Cafferata Apps — huisstijl
-   Donker thema geïnspireerd op de medische UI van Dicom Player:
-   bg #080E1A · surface #0F1A2E · card #162035 · teal #00C2CB · blauw #2F80ED
-   Geen externe dependencies — draait volledig offline op de NAS.
+   Cafferata Apps — huisstijl v2 "Liquid Glass"
+   Apple-look: licht, ruim, SF-typografie — met Liquid Glass
+   panelen (backdrop-blur + saturatie + speculaire randen) op een
+   zacht bewegende kleurgloed. Geen externe dependencies.
    ============================================================ */
 
 :root {
-  --bg: #080e1a;
-  --surface: #0f1a2e;
-  --card: #162035;
-  --card-edge: rgba(255, 255, 255, 0.07);
+  --bg: #f5f5f7;               /* Apple-grijs */
+  --text: #1d1d1f;
+  --muted: #6e6e73;
+  --hairline: #d2d2d7;
+  --link: #0066cc;
+  --blue: #0071e3;             /* Apple-knopblauw */
   --teal: #00c2cb;
-  --blue: #2f80ed;
   --violet: #7c5cff;
-  --amber: #ffb648;
-  --green: #34d399;
-  --text: #e8eefb;
-  --muted: #8da2c0;
-  --radius: 20px;
+  --green: #34c759;            /* Apple-systeemkleuren */
+  --orange: #ff9500;
+  --sysblue: #007aff;
+  --radius: 24px;
   --maxw: 1120px;
+
+  /* Liquid Glass receptuur */
+  --glass-bg: rgba(255, 255, 255, 0.58);
+  --glass-edge: rgba(255, 255, 255, 0.75);
+  --glass-blur: blur(26px) saturate(180%);
+  --glass-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  --glass-sheen: inset 0 1px 0 rgba(255, 255, 255, 0.85);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -28,56 +35,87 @@ html { scroll-behavior: smooth; }
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  line-height: 1.6;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Zachte gradient-gloed bovenin de pagina */
+/* Zacht drijvende kleurgloed achter het glas */
 body::before {
   content: "";
   position: fixed;
-  inset: -40vh -20vw auto -20vw;
-  height: 80vh;
+  inset: -30vh -25vw;
   background:
-    radial-gradient(ellipse 60% 50% at 25% 35%, rgba(0, 194, 203, 0.14), transparent 65%),
-    radial-gradient(ellipse 55% 45% at 75% 30%, rgba(47, 128, 237, 0.16), transparent 65%),
-    radial-gradient(ellipse 40% 40% at 55% 60%, rgba(124, 92, 255, 0.10), transparent 65%);
+    radial-gradient(38% 32% at 22% 26%, rgba(0, 194, 203, 0.22), transparent 70%),
+    radial-gradient(34% 30% at 78% 22%, rgba(0, 113, 227, 0.18), transparent 70%),
+    radial-gradient(36% 34% at 60% 78%, rgba(124, 92, 255, 0.16), transparent 70%),
+    radial-gradient(30% 28% at 14% 80%, rgba(255, 149, 0, 0.12), transparent 70%);
+  filter: blur(40px);
+  animation: aurora 26s ease-in-out infinite alternate;
   pointer-events: none;
   z-index: 0;
 }
 
+@keyframes aurora {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(3vw, -2vh, 0) scale(1.06); }
+  100% { transform: translate3d(-3vw, 2vh, 0) scale(1.02); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before { animation: none; }
+}
+
 main, header, footer { position: relative; z-index: 1; }
 
-a { color: var(--teal); text-decoration: none; }
+a { color: var(--link); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
 
-/* ---------- Navigatie ---------- */
+/* ---------- Liquid Glass basisklasse ---------- */
+.glass,
+nav,
+.card,
+.panel,
+.world {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-edge);
+  box-shadow: var(--glass-shadow), var(--glass-sheen);
+}
+
+/* Fallback zonder backdrop-filter */
+@supports not (backdrop-filter: blur(1px)) {
+  nav, .card, .panel, .world { background: rgba(255, 255, 255, 0.92); }
+}
+
+/* ---------- Navigatie (Apple-stijl, glas) ---------- */
 nav {
   position: sticky;
   top: 0;
   z-index: 10;
-  backdrop-filter: blur(18px) saturate(1.4);
-  -webkit-backdrop-filter: blur(18px) saturate(1.4);
-  background: rgba(8, 14, 26, 0.72);
-  border-bottom: 1px solid var(--card-edge);
+  background: rgba(251, 251, 253, 0.65);
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  box-shadow: none;
 }
 
 .nav-inner {
   max-width: var(--maxw);
   margin: 0 auto;
-  padding: 14px 24px;
+  padding: 12px 24px;
   display: flex;
   align-items: center;
   gap: 28px;
 }
 
 .brand {
-  font-weight: 800;
-  font-size: 1.05rem;
-  letter-spacing: 0.02em;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
   color: var(--text);
   display: flex;
   align-items: center;
@@ -86,156 +124,175 @@ nav {
 .brand:hover { text-decoration: none; }
 
 .brand-dot {
-  width: 12px; height: 12px;
+  width: 11px; height: 11px;
   border-radius: 4px;
   background: linear-gradient(135deg, var(--teal), var(--blue));
-  box-shadow: 0 0 12px rgba(0, 194, 203, 0.6);
+  box-shadow: 0 1px 4px rgba(0, 113, 227, 0.45);
 }
 
-.nav-links {
-  display: flex;
-  gap: 6px;
-  margin-left: auto;
-  flex-wrap: wrap;
-}
+.nav-links { display: flex; gap: 4px; margin-left: auto; flex-wrap: wrap; }
 
 .nav-links a {
-  color: var(--muted);
-  font-size: 0.92rem;
-  font-weight: 600;
+  color: rgba(29, 29, 31, 0.72);
+  font-size: 0.85rem;
+  font-weight: 500;
   padding: 7px 14px;
   border-radius: 999px;
   transition: color 0.2s, background 0.2s;
 }
-.nav-links a:hover { color: var(--text); background: rgba(255, 255, 255, 0.06); text-decoration: none; }
-.nav-links a.active { color: var(--bg); background: linear-gradient(135deg, var(--teal), var(--blue)); }
+.nav-links a:hover { color: var(--text); background: rgba(0, 0, 0, 0.05); text-decoration: none; }
+.nav-links a.active { color: #fff; background: var(--text); }
 
 /* ---------- Hero ---------- */
 .hero {
   text-align: center;
-  padding-top: 96px;
-  padding-bottom: 64px;
+  padding-top: 110px;
+  padding-bottom: 80px;
 }
 
-.hero .kicker {
+.kicker {
   display: inline-block;
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--teal);
-  background: rgba(0, 194, 203, 0.10);
-  border: 1px solid rgba(0, 194, 203, 0.25);
+  color: var(--blue);
+  background: rgba(0, 113, 227, 0.08);
+  border: 1px solid rgba(0, 113, 227, 0.18);
   padding: 6px 16px;
   border-radius: 999px;
-  margin-bottom: 22px;
+  margin-bottom: 26px;
 }
 
+.kicker-blue   { color: var(--blue);   background: rgba(0, 113, 227, 0.08); border-color: rgba(0, 113, 227, 0.18); }
+.kicker-amber  { color: #c93400;       background: rgba(255, 149, 0, 0.10); border-color: rgba(255, 149, 0, 0.25); }
+
 .hero h1 {
-  font-size: clamp(2.4rem, 6vw, 4rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.12;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+  font-size: clamp(2.6rem, 6.5vw, 4.6rem);
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  line-height: 1.07;
 }
 
 .hero h1 .grad {
-  background: linear-gradient(100deg, var(--teal) 10%, var(--blue) 55%, var(--violet) 95%);
+  background: linear-gradient(100deg, #0071e3 5%, #00c2cb 45%, #7c5cff 95%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .hero p {
-  max-width: 620px;
-  margin: 20px auto 0;
+  max-width: 640px;
+  margin: 24px auto 0;
   color: var(--muted);
-  font-size: 1.12rem;
+  font-size: 1.3rem;
+  font-weight: 400;
+  letter-spacing: 0.002em;
+  line-height: 1.45;
 }
 
 .hero-cta {
-  margin-top: 34px;
+  margin-top: 38px;
   display: flex;
-  gap: 14px;
+  gap: 16px;
   justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
 }
 
+/* ---------- Knoppen (Apple-pills met glas-sheen) ---------- */
 .btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-weight: 700;
-  font-size: 0.95rem;
-  padding: 12px 24px;
-  border-radius: 999px;
-  transition: transform 0.15s, box-shadow 0.15s;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 12px 26px;
+  border-radius: 980px;
+  transition: transform 0.18s cubic-bezier(0.2, 0.7, 0.3, 1.2), box-shadow 0.18s, background 0.18s;
+  overflow: hidden;
 }
-.btn:hover { text-decoration: none; transform: translateY(-2px); }
+.btn:hover { text-decoration: none; transform: scale(1.03); }
+.btn:active { transform: scale(0.98); }
+
+/* speculaire sheen over de knop */
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0) 45%);
+  pointer-events: none;
+}
 
 .btn-primary {
-  color: #04222a;
-  background: linear-gradient(135deg, var(--teal), var(--blue));
-  box-shadow: 0 8px 28px rgba(0, 194, 203, 0.32);
+  color: #fff;
+  background: var(--blue);
+  box-shadow: 0 6px 18px rgba(0, 113, 227, 0.32);
 }
-.btn-primary:hover { box-shadow: 0 12px 34px rgba(0, 194, 203, 0.45); }
+.btn-primary:hover { background: #0077ed; box-shadow: 0 10px 26px rgba(0, 113, 227, 0.42); }
 
 .btn-ghost {
   color: var(--text);
-  border: 1px solid var(--card-edge);
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.55);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  box-shadow: var(--glass-sheen);
 }
-.btn-ghost:hover { background: rgba(255, 255, 255, 0.08); }
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.8); }
 
 /* ---------- Secties ---------- */
-section { padding: 56px 0; }
+section { padding: 64px 0; }
 
-.section-head { margin-bottom: 34px; }
+.section-head { margin-bottom: 36px; text-align: center; }
 
 .section-head h2 {
-  font-size: clamp(1.5rem, 3vw, 2.1rem);
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  display: flex;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+  font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: -0.018em;
+  display: inline-flex;
   align-items: center;
   gap: 12px;
 }
 
-.section-head p { color: var(--muted); margin-top: 8px; max-width: 640px; }
+.section-head p { color: var(--muted); margin: 10px auto 0; max-width: 640px; font-size: 1.08rem; }
 
-/* ---------- App-kaarten ---------- */
+/* ---------- App-kaarten (Liquid Glass) ---------- */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 22px;
+  gap: 24px;
 }
 
 .card {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0)) , var(--card);
-  border: 1px solid var(--card-edge);
   border-radius: var(--radius);
-  padding: 26px;
+  padding: 28px;
   display: flex;
   flex-direction: column;
   gap: 14px;
-  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.3, 1.1), box-shadow 0.25s;
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(0, 194, 203, 0.35);
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.45);
+  transform: translateY(-5px) scale(1.012);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.12), var(--glass-sheen);
 }
 
 .card-top { display: flex; align-items: center; gap: 16px; }
 
+/* App-iconen als squircle-tegels */
 .app-icon {
-  width: 58px; height: 58px;
-  border-radius: 15px;
+  width: 60px; height: 60px;
+  border-radius: 16px;
   display: grid;
   place-items: center;
-  font-size: 1.7rem;
+  font-size: 1.75rem;
   flex-shrink: 0;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 6px 18px rgba(0,0,0,0.4);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 6px 14px rgba(0, 0, 0, 0.18);
 }
 
 .icon-teal   { background: linear-gradient(135deg, #00c2cb, #007f8f); }
@@ -247,98 +304,109 @@ section { padding: 56px 0; }
 .icon-pink   { background: linear-gradient(135deg, #f472b6, #b0337a); }
 .icon-slate  { background: linear-gradient(135deg, #64748b, #334155); }
 
-.card h3 { font-size: 1.18rem; font-weight: 750; }
+.card h3 { font-size: 1.22rem; font-weight: 700; letter-spacing: -0.012em; }
 
 .card .sub { font-size: 0.85rem; color: var(--muted); margin-top: 2px; }
 
-.card p.desc { color: var(--muted); font-size: 0.95rem; flex-grow: 1; }
+.card p.desc { color: #424245; font-size: 0.97rem; flex-grow: 1; }
 
 .badges { display: flex; gap: 8px; flex-wrap: wrap; }
 
 .badge {
-  font-size: 0.74rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
   padding: 4px 11px;
   border-radius: 999px;
   border: 1px solid transparent;
 }
 
-.badge-live      { color: var(--green); background: rgba(52, 211, 153, 0.10); border-color: rgba(52, 211, 153, 0.35); }
-.badge-soon      { color: var(--amber); background: rgba(255, 182, 72, 0.10); border-color: rgba(255, 182, 72, 0.35); }
-.badge-dev       { color: var(--blue);  background: rgba(47, 128, 237, 0.12); border-color: rgba(47, 128, 237, 0.40); }
-.badge-neutral   { color: var(--muted); background: rgba(141, 162, 192, 0.10); border-color: rgba(141, 162, 192, 0.30); }
+.badge-live    { color: #1d7a3a; background: rgba(52, 199, 89, 0.13);  border-color: rgba(52, 199, 89, 0.35); }
+.badge-soon    { color: #b25000; background: rgba(255, 149, 0, 0.13);  border-color: rgba(255, 149, 0, 0.35); }
+.badge-dev     { color: #0058b0; background: rgba(0, 122, 255, 0.10);  border-color: rgba(0, 122, 255, 0.30); }
+.badge-neutral { color: var(--muted); background: rgba(110, 110, 115, 0.10); border-color: rgba(110, 110, 115, 0.25); }
 
-.card-links { display: flex; gap: 16px; flex-wrap: wrap; padding-top: 4px; }
+.card-links { display: flex; gap: 18px; flex-wrap: wrap; padding-top: 4px; }
 
+/* Apple-stijl tekstlinks met chevron */
 .card-links a {
-  font-size: 0.9rem;
-  font-weight: 650;
+  font-size: 0.95rem;
+  font-weight: 450;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
+.card-links a::after { content: "›"; font-size: 1.05em; transition: transform 0.15s; }
+.card-links a:hover { text-decoration: none; }
+.card-links a:hover::after { transform: translateX(3px); }
 
-/* ---------- Twee-werelden blok (zakelijk / privé) ---------- */
-.split {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 22px;
-}
+/* ---------- Twee-werelden blok ---------- */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 
 .world {
   position: relative;
   overflow: hidden;
   border-radius: calc(var(--radius) + 6px);
-  border: 1px solid var(--card-edge);
-  padding: 40px 34px;
+  padding: 42px 36px;
   min-height: 250px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   gap: 10px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.3, 1.1), box-shadow 0.25s;
   color: var(--text);
 }
-.world:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-decoration: none; }
-
-.world-werk  { background: linear-gradient(150deg, rgba(47, 128, 237, 0.28), rgba(15, 26, 46, 0.9) 65%), var(--surface); }
-.world-prive { background: linear-gradient(150deg, rgba(255, 182, 72, 0.25), rgba(15, 26, 46, 0.9) 65%), var(--surface); }
-
-.world .emoji { font-size: 2.4rem; }
-.world h3 { font-size: 1.45rem; font-weight: 800; }
-.world p { color: var(--muted); font-size: 0.97rem; }
-.world .go { font-weight: 700; color: var(--teal); margin-top: 6px; }
-
-/* ---------- Inhoudspagina's ---------- */
-.page-hero { padding-top: 72px; padding-bottom: 26px; }
-.page-hero h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; letter-spacing: -0.02em; }
-.page-hero p.lead { color: var(--muted); font-size: 1.1rem; max-width: 680px; margin-top: 14px; }
-
-.panel {
-  background: var(--surface);
-  border: 1px solid var(--card-edge);
-  border-radius: var(--radius);
-  padding: 30px;
+.world:hover {
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 0 26px 52px rgba(0, 0, 0, 0.14), var(--glass-sheen);
+  text-decoration: none;
 }
 
-.panel h3 { font-size: 1.25rem; margin-bottom: 10px; }
-.panel p, .panel li { color: var(--muted); }
-.panel ul { padding-left: 22px; margin-top: 10px; display: grid; gap: 6px; }
+/* gekleurde gloed ín het glas */
+.world::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.world-werk::before  { background: radial-gradient(120% 90% at 18% 0%, rgba(0, 113, 227, 0.16), transparent 60%); }
+.world-prive::before { background: radial-gradient(120% 90% at 18% 0%, rgba(255, 149, 0, 0.16), transparent 60%); }
 
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.world > * { position: relative; }
+.world .emoji { font-size: 2.5rem; }
+.world h3 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.015em; }
+.world p { color: var(--muted); font-size: 1rem; }
+.world .go { font-weight: 500; color: var(--link); margin-top: 6px; }
+
+/* ---------- Inhoudspagina's ---------- */
+.page-hero { padding-top: 84px; padding-bottom: 30px; text-align: center; }
+.page-hero h1 {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.page-hero p.lead { color: var(--muted); font-size: 1.22rem; max-width: 700px; margin: 16px auto 0; line-height: 1.45; }
+
+.panel { border-radius: var(--radius); padding: 32px; }
+
+.panel h3 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.012em; margin-bottom: 10px; }
+.panel p, .panel li { color: #424245; }
+.panel ul { padding-left: 22px; margin-top: 10px; display: grid; gap: 7px; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 
 .feature-list { list-style: none !important; padding-left: 0 !important; }
 .feature-list li { display: flex; gap: 12px; align-items: baseline; }
-.feature-list li::before { content: "▸"; color: var(--teal); font-weight: 800; }
+.feature-list li::before { content: "›"; color: var(--blue); font-weight: 700; }
 
-/* ---------- Footer ---------- */
+/* ---------- Footer (Apple-stijl) ---------- */
 footer {
-  border-top: 1px solid var(--card-edge);
-  margin-top: 60px;
-  padding: 36px 0 48px;
+  border-top: 1px solid var(--hairline);
+  margin-top: 64px;
+  padding: 28px 0 44px;
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 
 .foot-inner {
@@ -357,6 +425,7 @@ footer {
 /* ---------- Responsief ---------- */
 @media (max-width: 760px) {
   .split, .two-col { grid-template-columns: 1fr; }
-  .hero { padding-top: 64px; padding-bottom: 44px; }
+  .hero { padding-top: 72px; padding-bottom: 52px; }
+  .hero p { font-size: 1.12rem; }
   .nav-inner { gap: 14px; }
 }

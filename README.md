@@ -47,11 +47,14 @@ Op `cafferata.info` (82.172.143.72, nginx) draait nu een WordPress-site over
 De `canonical`/Open Graph-tags, `robots.txt` en `sitemap.xml` staan nu ingesteld
 op de root (`https://cafferata.info/`).
 
-## Huisstijl
+## Huisstijl — Apple / Liquid Glass
 
-Kleuren komen uit het medische dark theme van Dicom Player:
-achtergrond `#080E1A`, surface `#0F1A2E`, card `#162035`,
-accent teal `#00C2CB`, blauw `#2F80ED`.
+Licht Apple-thema (achtergrond `#f5f5f7`, tekst `#1d1d1f`, knopblauw `#0071e3`)
+met SF-typografie via `-apple-system`. Alle panelen (nav, kaarten, knoppen)
+zijn **Liquid Glass**: `backdrop-filter: blur(26px) saturate(180%)`, speculaire
+randen en sheen, met daaronder een zacht bewegende kleurgloed (aurora-animatie,
+respecteert `prefers-reduced-motion`). Browsers zonder `backdrop-filter` krijgen
+automatisch een dekkende fallback via `@supports`.
 
 ## Apps bijwerken
 
