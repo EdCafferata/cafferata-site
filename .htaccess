@@ -1,0 +1,10 @@
+# HTML altijd vers ophalen (voorkomt verouderde pagina's uit browsercache);
+# assets mogen een dag cachen — de ?v= cache-buster regelt updates daarvan.
+<IfModule mod_headers.c>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "\.(css|js|png|jpg|jpeg|svg|webp|ico)$">
+    Header set Cache-Control "public, max-age=86400"
+  </FilesMatch>
+</IfModule>
