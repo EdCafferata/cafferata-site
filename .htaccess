@@ -1,3 +1,17 @@
+# Oude WordPress-URL's (het blog stond eerst op de root) permanent doorsturen
+# naar piper.cafferata.info, zodat oude links en zoekresultaten blijven werken.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # Datum-permalinks: /2022/07/15/slug/
+  RewriteRule ^\d{4}/\d{2}/ https://piper.cafferata.info%{REQUEST_URI} [R=301,L]
+  # Categorieën, tags, auteurs, feeds, media en API
+  RewriteRule ^(category|tag|author|feed|comments|wp-content|wp-includes|wp-json)(/|$) https://piper.cafferata.info%{REQUEST_URI} [R=301,L]
+  RewriteRule ^wp-(login\.php|admin) https://piper.cafferata.info%{REQUEST_URI} [R=301,L]
+  # Oude query-permalinks: /?p=123, /?page_id=7, /?cat=11, /?m=201408
+  RewriteCond %{QUERY_STRING} (^|&)(p|page_id|cat|m)=\d+
+  RewriteRule ^$ https://piper.cafferata.info/ [R=301,L]
+</IfModule>
+
 # HTML altijd vers ophalen (voorkomt verouderde pagina's uit browsercache);
 # assets mogen een dag cachen — de ?v= cache-buster regelt updates daarvan.
 <IfModule mod_headers.c>
