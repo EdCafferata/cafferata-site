@@ -272,6 +272,14 @@ section { padding: 64px 0; }
 
 .grid-2 { grid-template-columns: repeat(2, 1fr); }
 
+/* Eén tegel: in het midden uitlijnen */
+.grid > *:only-child {
+  grid-column: 1 / -1;
+  width: 100%;
+  max-width: 480px;
+  justify-self: center;
+}
+
 @media (max-width: 980px) {
   .grid { grid-template-columns: repeat(2, 1fr); }
 }
