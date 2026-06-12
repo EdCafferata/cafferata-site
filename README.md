@@ -26,25 +26,32 @@ python3 -m http.server 8765
 
 ## Deployen op cafferata.info (NAS)
 
-Op `cafferata.info` (82.172.143.72, nginx) draait nu een WordPress-site over
-**Cafferata's Piper Rising**. Twee opties om deze site ernaast of ervoor te zetten:
+**Besluit (12 juni 2026):** deze site komt op de **root** `https://cafferata.info/`.
+De WordPress-site over **Cafferata's Piper Rising** die daar nu draait, verhuist
+naar `https://piper.cafferata.info` — de privépagina linkt daar al naartoe.
 
-**Optie A — subdomein (aanrader, WordPress blijft staan):**
-1. Voeg in DNS een record toe: `apps.cafferata.info` → zelfde IP.
-2. Maak een nginx server-block (of Web Station virtual host) voor
-   `apps.cafferata.info` met als root de map met deze bestanden.
-3. Let's Encrypt-certificaat erbij en klaar — de boot-site blijft onaangetast.
-   Pas daarna in de HTML de `canonical`/`og:url` tags aan naar `apps.cafferata.info`.
+Volgorde (eerst WordPress verhuizen, dan deze site op de root):
 
-**Optie B — site op de root:**
-1. Kopieer de bestanden naar de webroot van het `cafferata.info` server-block:
+1. **DNS:** voeg een A-record toe: `piper.cafferata.info` → 82.172.143.72
+   (zelfde IP als de root).
+2. **Webserver:** maak in nginx (of DSM → Web Station → virtual host) een
+   server-block voor `piper.cafferata.info` dat naar de bestaande
+   WordPress-installatie wijst, en vraag er een Let's Encrypt-certificaat bij aan.
+3. **WordPress:** pas het site-adres aan naar `https://piper.cafferata.info`
+   (Instellingen → Algemeen, of in `wp-config.php`:
+   `define('WP_HOME','https://piper.cafferata.info');` +
+   `define('WP_SITEURL','https://piper.cafferata.info');`).
+   Controleer dat de site op het subdomein werkt vóór stap 4.
+4. **Deze site op de root:** kopieer de bestanden naar de webroot van het
+   `cafferata.info` server-block:
    ```bash
    rsync -av --delete --exclude '.git' ./ admin@NAS-IP:/volume1/web/cafferata/
    ```
-2. Verhuis WordPress dan eerst naar bijv. `piper.cafferata.info` zodat de
-   boot-site bereikbaar blijft.
+5. Optioneel: zet in het root-block een redirect van oude WordPress-URL's
+   (bijv. `/wp-content/...`, `/?p=...`) naar `https://piper.cafferata.info$request_uri`
+   zodat oude links en zoekresultaten blijven werken.
 
-De `canonical`/Open Graph-tags, `robots.txt` en `sitemap.xml` staan nu ingesteld
+De `canonical`/Open Graph-tags, `robots.txt` en `sitemap.xml` staan al ingesteld
 op de root (`https://cafferata.info/`).
 
 ## Huisstijl — Apple / Liquid Glass
