@@ -1,7 +1,7 @@
 # Cafferata Apps — website
 
-Statische website voor op de eigen NAS: landingspagina met alle apps (live in de
-App Store én in ontwikkeling), een zakelijk deel voor **The IT Crowd** en een
+Statische website voor **cafferata.info**: landingspagina met alle apps (live in
+de App Store én in ontwikkeling), een zakelijk deel voor **The IT Crowd** en een
 privédeel voor vakanties en losse projectjes.
 
 🌐 Geen build-stap, geen dependencies — drie HTML-pagina's en één stylesheet.
@@ -24,16 +24,28 @@ python3 -m http.server 8765
 # → http://localhost:8765
 ```
 
-## Deployen op de Synology NAS
+## Deployen op cafferata.info (NAS)
 
-1. Zet **Web Station** aan in DSM (Package Center → Web Station installeren).
-2. Kopieer de bestanden naar de webroot:
+Op `cafferata.info` (82.172.143.72, nginx) draait nu een WordPress-site over
+**Cafferata's Piper Rising**. Twee opties om deze site ernaast of ervoor te zetten:
+
+**Optie A — subdomein (aanrader, WordPress blijft staan):**
+1. Voeg in DNS een record toe: `apps.cafferata.info` → zelfde IP.
+2. Maak een nginx server-block (of Web Station virtual host) voor
+   `apps.cafferata.info` met als root de map met deze bestanden.
+3. Let's Encrypt-certificaat erbij en klaar — de boot-site blijft onaangetast.
+   Pas daarna in de HTML de `canonical`/`og:url` tags aan naar `apps.cafferata.info`.
+
+**Optie B — site op de root:**
+1. Kopieer de bestanden naar de webroot van het `cafferata.info` server-block:
    ```bash
-   rsync -av --delete --exclude '.git' ./ admin@NAS-IP:/volume1/web/
+   rsync -av --delete --exclude '.git' ./ admin@NAS-IP:/volume1/web/cafferata/
    ```
-   (of via File Station naar de gedeelde map `web` slepen)
-3. Klaar — de site draait op `http://NAS-IP/`. Koppel eventueel een eigen
-   domein + Let's Encrypt-certificaat via DSM → Control Panel → Security.
+2. Verhuis WordPress dan eerst naar bijv. `piper.cafferata.info` zodat de
+   boot-site bereikbaar blijft.
+
+De `canonical`/Open Graph-tags, `robots.txt` en `sitemap.xml` staan nu ingesteld
+op de root (`https://cafferata.info/`).
 
 ## Huisstijl
 
