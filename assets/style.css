@@ -292,7 +292,17 @@ section { padding: 64px 0; }
   place-items: center;
   font-size: 1.75rem;
   flex-shrink: 0;
+  overflow: hidden;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 6px 14px rgba(0, 0, 0, 0.18);
+}
+
+/* Echte app-iconen vullen de hele tegel */
+.app-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  display: block;
 }
 
 .icon-teal   { background: linear-gradient(135deg, #00c2cb, #007f8f); }
