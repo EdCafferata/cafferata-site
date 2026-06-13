@@ -51,6 +51,10 @@ dan per repo een nette knop + logs hebt.
 > Tip: één runner kan alle iOS-repo's bedienen als je hem op org-niveau registreert
 > i.p.v. per repo.
 
+**Klaar template:** [`docs/voorbeeld-ios-release.yml`](voorbeeld-ios-release.yml) —
+kopieer naar een iOS-repo als `.github/workflows/release.yml`. Draait alleen op een
+tag `v*` en pas zodra er een Mac mini-runner is; tot dan doet het niets.
+
 ---
 
 ## 2. Synology NAS — web, cron & containers (draait al 24/7)

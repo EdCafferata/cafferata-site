@@ -1,0 +1,55 @@
+# Voorbeeld GitHub Actions workflow voor iOS-release op een self-hosted Mac mini-runner.
+# Onderzoek/template door Claude, 13 juni 2026 — zie docs/AUTOMATISERING.md.
+#
+# GEBRUIK:
+#   1. Zet eerst een self-hosted runner op de Mac mini (Repo → Settings → Actions →
+#      Runners → New self-hosted runner → macOS; ./config.sh + ./svc.sh install).
+#   2. Kopieer dit bestand naar de iOS-repo als .github/workflows/release.yml
+#      (werkt voor de fastlane-apps: BVK, RNH, Tattoe — pas de lane/scheme aan).
+#   3. Zet een tag en push:  git tag v2.3.0 && git push origin v2.3.0
+#      → de Mac mini bouwt en uploadt automatisch naar TestFlight.
+#
+# Veilig: draait ALLEEN op een tag 'v*', en alleen als er een self-hosted runner is.
+# Tot die tijd doet dit bestand niets.
+
+name: iOS Release
+
+on:
+  push:
+    tags:
+      - 'v*'            # bv. v2.3.0 — alleen tags triggeren een release
+
+jobs:
+  testflight:
+    runs-on: [self-hosted, macOS]   # de Mac mini-runner
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Toon Xcode-versie
+        run: xcodebuild -version
+
+      - name: Bundler-dependencies (fastlane)
+        run: |
+          gem install bundler --no-document
+          bundle install
+
+      # App Store Connect API-key uit repo-secrets (Settings → Secrets → Actions).
+      # Alternatief: laat fastlane de key uit ~/.appstoreconnect/private_keys lezen
+      # die al op de Mac mini staat, dan heb je deze stap niet nodig.
+      - name: Build + upload naar TestFlight
+        env:
+          APP_STORE_CONNECT_API_KEY_ID:     ${{ secrets.ASC_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID:  ${{ secrets.ASC_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.ASC_KEY_P8 }}
+        run: bundle exec fastlane beta      # of: fastlane release voor App Store
+
+      - name: Bewaar het IPA als artefact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ipa-${{ github.ref_name }}
+          path: '**/*.ipa'
+          if-no-files-found: ignore
