@@ -495,3 +495,113 @@ footer {
   .nav-links { gap: 2px; }
   .nav-links a { padding: 6px 11px; font-size: 0.82rem; }
 }
+
+/* ---------- Fotostrip (2-3 foto's per dag, in het reisverhaal) ---------- */
+.photo-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 16px;
+}
+.photo-strip a {
+  display: block;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid var(--glass-edge);
+}
+.photo-strip img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.25s ease;
+}
+.photo-strip a:hover img { transform: scale(1.06); }
+
+/* ---------- Fotoalbum (volledige galerij per dag + lightbox) ---------- */
+.album-day { margin-bottom: 40px; }
+.album-day h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  margin-bottom: 14px;
+  padding-left: 2px;
+}
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+}
+.album-grid a, .album-grid .video-tile {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--glass-edge);
+  display: block;
+  cursor: pointer;
+}
+.album-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.2s ease;
+}
+.album-grid a:hover img { transform: scale(1.08); }
+.video-tile::after {
+  content: "\25B6";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  color: #fff;
+  background: rgba(0,0,0,0.28);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 12, 0.92);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 32px;
+}
+.lightbox.open { display: flex; }
+.lightbox img, .lightbox video {
+  max-width: 100%;
+  max-height: 90vh;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.lightbox-close, .lightbox-prev, .lightbox-next {
+  position: absolute;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+  border-radius: 999px;
+  width: 44px;
+  height: 44px;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-style: solid;
+}
+.lightbox-close { top: 20px; right: 20px; }
+.lightbox-prev { left: 20px; top: 50%; transform: translateY(-50%); }
+.lightbox-next { right: 20px; top: 50%; transform: translateY(-50%); }
+.lightbox-close:hover, .lightbox-prev:hover, .lightbox-next:hover { background: rgba(255,255,255,0.24); }
+
+@media (max-width: 620px) {
+  .photo-strip { gap: 6px; }
+  .lightbox { padding: 12px; }
+  .lightbox-prev, .lightbox-next { width: 38px; height: 38px; font-size: 1.1rem; }
+}
