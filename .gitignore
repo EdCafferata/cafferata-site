@@ -1,0 +1,10 @@
+# macOS
+.DS_Store
+
+# Gevoelige bestanden (nooit committen)
+.env
+.env.*
+
+# Editor/tooling
+.vscode/
+*.log
