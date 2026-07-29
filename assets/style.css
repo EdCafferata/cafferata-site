@@ -362,6 +362,7 @@ section { padding: 64px 0; }
 .icon-green  { background: linear-gradient(135deg, #34d399, #0e8f60); }
 .icon-pink   { background: linear-gradient(135deg, #f472b6, #b0337a); }
 .icon-slate  { background: linear-gradient(135deg, #64748b, #334155); }
+.icon-indigo { background: linear-gradient(135deg, #6366f1, #3730a3); }
 
 .card h3 { font-size: 1.22rem; font-weight: 700; letter-spacing: -0.012em; }
 
