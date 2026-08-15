@@ -1,6 +1,6 @@
 # Cafferata Apps — website
 
-🔒 Laatste security check: 2026-08-13 23:00 CEST
+🔒 Laatste security check: 2026-08-15 23:12 CEST
 
 Statische website voor **cafferata.info**: landingspagina met alle apps (live in
 de App Store én in ontwikkeling), een zakelijk deel voor **The IT Crowd** en een
