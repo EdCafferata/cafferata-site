@@ -22,3 +22,10 @@
     Header set Cache-Control "public, max-age=86400"
   </FilesMatch>
 </IfModule>
+
+# Interne projectbestanden (docs/, README, logs, CI-voorbeelden) horen niet publiek
+# op de site. Deploy sluit ze uit; deze regels zijn de vangrail als er toch iets landt.
+<FilesMatch "(\.(md|yml|yaml)|^\.gitignore)$">
+  Require all denied
+</FilesMatch>
+RedirectMatch 404 ^/docs(/|$)

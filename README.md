@@ -39,6 +39,7 @@ draait daar zelfstandig door — niet aankomen vanuit deze repo.
 **Deploy-commando:**
 ```bash
 rsync -av --exclude '.git' --exclude '.DS_Store' --exclude 'README.md' \
+  --exclude 'docs' --exclude '.gitignore' \
   /Volumes/Backup-Ed/AI/cafferata-site/ /Volumes/web/
 ```
 (`/Volumes/web` is de SMB-mount van de NAS-webroot `/volume1/web`.)
