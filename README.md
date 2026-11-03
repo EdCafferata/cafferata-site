@@ -68,3 +68,8 @@ Nieuwe app live? Voeg een `<article class="card">` toe in `index.html` onder
 `#live` (of `#onderweg`) — kopieer een bestaande kaart en pas icoon
 (`icon-teal`/`icon-blue`/…), badge (`badge-live`/`badge-soon`/`badge-dev`)
 en links aan.
+
+Wikkel het logo in `.app-icon` in een `<a>` naar de hoofd-link van de app
+(App Store voor live apps, eigen website voor apps die er een hebben, anders
+GitHub) — zo is het icoon zelf klikbaar. Laat de link weg als er nog geen
+zinnige publieke pagina is.
