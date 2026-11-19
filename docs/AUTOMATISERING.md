@@ -18,7 +18,7 @@ Het zijn drie verschillende soorten "automatisering". Niet kiezen tussen, maar
 
 **De harde regel:** een iOS-app bouwen en naar TestFlight/App Store sturen kan
 **uitsluitend op macOS** (Xcode is vereist). De NAS kan dat niet. Dus alle iOS-apps
-(DICOM Player, BVK, RNH, Tattoe, OC-Consent) horen op de **Mac mini**. De NAS doet
+(DICOM Player, BVK, RNH, OC-Consent) horen op de **Mac mini**. De NAS doet
 het web-werk (Alltrexx, de sites) en geplande klusjes. OpenClaw is een optionele
 slimme laag erbovenpop.
 
@@ -26,8 +26,7 @@ slimme laag erbovenpop.
 
 ## 1. Mac mini — de iOS-buildmachine (aanrader voor de apps)
 
-Je hebt fastlane al werkend (BVK/RNH: `fastlane beta`/`release`; Tattoe: `bundle
-exec fastlane beta`). Maak daar een **self-hosted GitHub Actions runner** bij, dan
+Je hebt fastlane al werkend (BVK/RNH: `fastlane beta`/`release`). Maak daar een **self-hosted GitHub Actions runner** bij, dan
 bouwt en publiceert de Mac mini automatisch zodra je een tag/commit pusht.
 
 **Waarom self-hosted i.p.v. GitHub's cloud-macOS:**
